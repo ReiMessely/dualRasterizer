@@ -1,4 +1,6 @@
 #pragma once
+#include <functional>
+#include "Camera.h"
 
 struct SDL_Window;
 struct SDL_Surface;
@@ -19,13 +21,27 @@ namespace dae
 		void Update(const Timer* pTimer);
 		void Render() const;
 
+		void ToggleBetweenHardwareSoftware();
+
 	private:
+		// Base
 		SDL_Window* m_pWindow{};
 
 		int m_Width{};
 		int m_Height{};
 
 		bool m_IsInitialized{ false };
+
+		// Mode switch
+		bool m_IsUsingHardware;
+		std::function<void()> m_pCurrentRendererfunction;
+
+		// ...
+		Camera m_Camera;
+
+		//Render methods
+		void Render_software() const;
+		void Render_hardware() const;
 
 		//DIRECTX
 		HRESULT InitializeDirectX();

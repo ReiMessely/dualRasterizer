@@ -5,9 +5,12 @@
 
 namespace dae {
 
-	Renderer::Renderer(SDL_Window* pWindow) :
-		m_pWindow(pWindow)
+	Renderer::Renderer(SDL_Window* pWindow) 
+		:m_pWindow(pWindow)
 	{
+		m_pCurrentRendererfunction = [this] {Render_hardware(); };
+		m_IsUsingHardware = true;
+
 		//Initialize
 		SDL_GetWindowSize(pWindow, &m_Width, &m_Height);
 
@@ -22,6 +25,8 @@ namespace dae {
 		{
 			std::cout << "DirectX initialization failed!\n";
 		}
+
+		m_Camera.Initialize(45.f, {}, static_cast<float>(m_Width) / m_Height);
 	}
 
 	Renderer::~Renderer()
@@ -49,7 +54,7 @@ namespace dae {
 
 	void Renderer::Update(const Timer* pTimer)
 	{
-
+		m_Camera.Update(pTimer);
 	}
 
 
@@ -58,6 +63,32 @@ namespace dae {
 		if (!m_IsInitialized)
 			return;
 
+		m_pCurrentRendererfunction();
+	}
+
+	void Renderer::ToggleBetweenHardwareSoftware()
+	{
+		if (m_IsUsingHardware)
+		{
+			m_pCurrentRendererfunction = [this] {Render_software(); };
+			m_IsUsingHardware = false;
+		}
+		else
+		{
+			m_pCurrentRendererfunction = [this] {Render_hardware(); };
+			m_IsUsingHardware = true;
+		}
+		std::cout << "[GLOBAL MODE] " << (m_IsUsingHardware ? "Hardware" : "Software") << '\n';
+	}
+
+	void Renderer::Render_software() const
+	{
+		
+	}
+
+	void Renderer::Render_hardware() const
+	{
+		
 	}
 
 	HRESULT Renderer::InitializeDirectX()
