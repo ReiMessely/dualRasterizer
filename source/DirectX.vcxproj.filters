@@ -36,6 +36,7 @@
     <ClInclude Include="ColorRGB.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="HelperFuncts.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
