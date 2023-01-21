@@ -43,11 +43,11 @@ dae::Texture::Texture(ID3D11Device* pDevice, const std::string& filePath)
 
 dae::Texture::~Texture()
 {
+	SAFE_RELEASE(m_pResource);
+	SAFE_RELEASE(m_pShaderResourceView);
+
 	if (m_pSurface)
 	{
-		SAFE_RELEASE(m_pResource);
-		SAFE_RELEASE(m_pShaderResourceView);
-
 		SDL_FreeSurface(m_pSurface);
 		m_pSurface = nullptr;
 	}
