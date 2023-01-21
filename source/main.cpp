@@ -57,13 +57,42 @@ int main(int argc, char* args[])
 				isLooping = false;
 				break;
 			case SDL_KEYDOWN:
-				if (e.key.keysym.scancode == SDL_SCANCODE_F1)
+				switch (e.key.keysym.scancode)
 				{
+				case SDL_SCANCODE_F1:
 					pRenderer->ToggleBetweenHardwareSoftware();
-				}
-				else if (e.key.keysym.scancode = SDL_SCANCODE_F11)
-				{
+					break;
+				case SDL_SCANCODE_F2:
+					pRenderer->ToggleRotation();
+					break;
+				case SDL_SCANCODE_F3:
+					pRenderer->ToggleFireFXMesh();
+					break;
+				case SDL_SCANCODE_F4:
+					pRenderer->ToggleTextureSamplingStates();
+					break;
+				case SDL_SCANCODE_F5:
+					pRenderer->CycleShadingMode();
+					break;
+				case SDL_SCANCODE_F6:
+					pRenderer->ToggleNormalMap();
+					break;
+				case SDL_SCANCODE_F7:
+					pRenderer->ToggleDepthBufferVisualisation();
+					break;
+				case SDL_SCANCODE_F8:
+					pRenderer->ToggleBoundingBoxVisualisation();
+					break;
+				case SDL_SCANCODE_F9:
+					pRenderer->CycleCullModes();
+					break;
+				case SDL_SCANCODE_F10:
+					pRenderer->ToggleUniformClearColor();
+					break;
+				case SDL_SCANCODE_F11:
 					displayFPS = !displayFPS;
+					std::cout << "[FPS DISPLAY] " << (displayFPS ? "Enabled" : "Disabled") << '\n';
+					break;
 				}
 				break;
 			default: ;

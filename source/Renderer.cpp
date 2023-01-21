@@ -85,6 +85,10 @@ namespace dae {
 
 		for (auto& pMesh : m_pMeshes)
 		{
+			if (m_EnableRotation)
+			{
+				pMesh->RotateY(m_RotationSpeed * pTimer->GetElapsed() * TO_RADIANS);
+			}
 			pMesh->UpdateViewMatrices(m_Camera.GetWorldViewProjection(), m_Camera.GetInverseViewMatrix());
 		}
 	}
@@ -113,9 +117,72 @@ namespace dae {
 		std::cout << "[GLOBAL MODE] " << (m_IsUsingHardware ? "Hardware" : "Software") << '\n';
 	}
 
+	void Renderer::ToggleRotation()
+	{
+		m_EnableRotation = !m_EnableRotation;
+		std::cout << "[ROTATION] " << (m_EnableRotation ? "Enabled" : "Disabled") << '\n';
+	}
+
+	void Renderer::CycleCullModes()
+	{
+	}
+
+	void Renderer::ToggleUniformClearColor()
+	{
+		m_EnableUniformClearColor = !m_EnableUniformClearColor;
+		std::cout << "[UNIFORM COLOR] " << (m_EnableUniformClearColor ? "Enabled" : "Disabled") << '\n';
+	}
+
+	void Renderer::ToggleFireFXMesh()
+	{
+		m_EnableFireFX = !m_EnableFireFX;
+		std::cout << "[FIREFX] " << (m_EnableFireFX ? "Enabled" : "Disabled") << '\n';
+	}
+
+	void Renderer::ToggleTextureSamplingStates()
+	{
+		m_FilteringMethod = static_cast<Effect::FilteringMethod>((static_cast<int>(m_FilteringMethod) + 1) % (static_cast<int>(Effect::FilteringMethod::END)));
+		for (const auto& pMesh : m_pMeshes)
+		{
+			pMesh->SetFilteringMethod(m_FilteringMethod);
+		}
+
+		std::cout << "[FILTERINGMETHOD] ";
+		switch (m_FilteringMethod)
+		{
+		case dae::Effect::FilteringMethod::Point:
+			std::cout << "Point\n";
+			break;
+		case dae::Effect::FilteringMethod::Linear:
+			std::cout << "Linear\n";
+			break;
+		case dae::Effect::FilteringMethod::Anisotropic:
+			std::cout << "Anisotropic\n";
+			break;
+		}
+	}
+
+	void Renderer::CycleShadingMode()
+	{
+	}
+
+	void Renderer::ToggleNormalMap()
+	{
+		m_EnableNormalMap = !m_EnableNormalMap;
+		std::cout << "[NORMAL MAP] " << (m_EnableNormalMap ? "Enabled" : "Disabled") << '\n';
+	}
+
+	void Renderer::ToggleDepthBufferVisualisation()
+	{
+	}
+
+	void Renderer::ToggleBoundingBoxVisualisation()
+	{
+	}
+
 	void Renderer::Render_software() const
 	{
-		
+
 	}
 
 	void Renderer::Render_hardware() const
