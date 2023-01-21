@@ -1,5 +1,6 @@
 #pragma once
 #include "DataTypes.h"
+#include "Effect.h"
 
 enum class PrimitiveTopology
 {
@@ -9,8 +10,6 @@ enum class PrimitiveTopology
 
 namespace dae
 {
-	class Effect;
-
 	class Mesh final
 	{
 	public:
@@ -32,6 +31,8 @@ namespace dae
 		void Render(ID3D11DeviceContext* pDeviceContext) const;
 
 		void UpdateViewMatrices(const Matrix& viewProjectionMatrix, const Matrix& inverseViewMatrix);
+
+		void SetFilteringMethod(Effect::FilteringMethod filteringMethod);
 
 		// Software
 		std::vector<Vertex> vertices{};

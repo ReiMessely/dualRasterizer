@@ -149,3 +149,8 @@ void dae::Mesh::UpdateViewMatrices(const Matrix& viewProjectionMatrix, const Mat
 	m_pEffect->SetInverseViewMatrix(inverseViewMatrix);
 	m_pEffect->SetWorldMatrix(m_WorldMatrix);
 }
+
+void dae::Mesh::SetFilteringMethod(Effect::FilteringMethod filteringMethod)
+{
+	m_pEffect->SetFilteringMethod(filteringMethod);
+}

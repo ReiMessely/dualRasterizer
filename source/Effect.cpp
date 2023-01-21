@@ -75,13 +75,10 @@ namespace dae
 		}
 	}
 
-	void Effect::CycleFilteringMethods()
+	void Effect::SetFilteringMethod(FilteringMethod filterMethod)
 	{
-	
-		m_FilteringMethod = static_cast<FilteringMethod>((static_cast<int>(m_FilteringMethod) + 1) % (static_cast<int>(FilteringMethod::END)));
-
 		std::cout << "[FILTERINGMETHOD] ";
-		switch (m_FilteringMethod)
+		switch (filterMethod)
 		{
 		case dae::Effect::FilteringMethod::Point:
 			m_pTechnique = m_pEffect->GetTechniqueByName("PointFilteringTechnique");
