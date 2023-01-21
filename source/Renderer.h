@@ -64,6 +64,10 @@ namespace dae
 
 		bool m_IsInitialized{ false };
 
+		const ColorRGB m_HardwareClearColor{ .39f, .59f, .93f };
+		const ColorRGB m_SoftwareClearColor{ .39f, .39f, .39f };
+		const ColorRGB m_UniformClearColor{ .1f, .1f, .1f };
+
 		// Mode switch
 		bool m_IsUsingHardware;
 		std::function<void()> m_pCurrentRendererfunction;
@@ -71,6 +75,7 @@ namespace dae
 		bool m_EnableRotation{ true };
 		bool m_EnableUniformClearColor{ false };
 		bool m_EnableFireFX{ true };
+		const Mesh* m_pFireFX{ nullptr };
 		bool m_EnableNormalMap{ true };
 		bool m_EnableDepthBufferVisualisation{ false };
 		bool m_EnableBoundingBoxVisualisation{ false };
@@ -80,7 +85,7 @@ namespace dae
 		Camera m_Camera;
 		std::vector<Mesh*> m_pMeshes;
 
-		float m_RotationSpeed{ 30.f };
+		float m_RotationSpeed{ 45.f }; // in degrees per second
 
 		//Render methods
 		void Render_software() const;

@@ -46,7 +46,19 @@ namespace dae {
 
 		m_pMeshes.push_back(new Mesh{ m_pDevice, "Resources/vehicle.obj", std::move(pShadedEffect) });
 
-		m_pMeshes.back()->Translate(0, 0, 50);
+		auto pEffect{ std::make_unique<Effect>(m_pDevice, L"Resources/Transparent3D.fx") };
+
+		Texture fireDiffuseTexture{ m_pDevice, "Resources/fireFX_diffuse.png" };
+		pEffect->SetDiffuseMap(&fireDiffuseTexture);
+
+		Mesh* pFireFX = new Mesh{ m_pDevice, "Resources/fireFX.obj",std::move(pEffect) };
+		m_pFireFX = pFireFX;
+		m_pMeshes.push_back(pFireFX);
+
+		for (auto& pMesh : m_pMeshes)
+		{
+			pMesh->Translate(0, 0, 50);
+		}
 	}
 
 	Renderer::~Renderer()
@@ -188,13 +200,15 @@ namespace dae {
 	void Renderer::Render_hardware() const
 	{
 		// 1. Clear RTV and DSV
-		ColorRGB clearColor{ 0.0f, 0.0f, 0.3f };
+		ColorRGB clearColor{ (m_EnableUniformClearColor ? m_UniformClearColor : m_HardwareClearColor) };
+
 		m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, &clearColor.r);
 		m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		// 2. Set pipeline + Invoke drawcalls (= render)
 		for (const auto& pMesh : m_pMeshes)
 		{
+			if (m_EnableFireFX && pMesh == m_pFireFX) continue;
 			pMesh->Render(m_pDeviceContext);
 		}
 
