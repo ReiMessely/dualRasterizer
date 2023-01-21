@@ -93,7 +93,7 @@ int main(int argc, char* args[])
 					break;
 				case SDL_SCANCODE_F11:
 					displayFPS = !displayFPS;
-					std::wcout << BOLDWHITE << L"[FPS DISPLAY] " << (displayFPS ? L"Enabled" : L"Disabled") << '\n' << RESET;
+					std::wcout << YELLOW << L"[FPS DISPLAY] " << (displayFPS ? L"Enabled" : L"Disabled") << '\n' << RESET;
 					break;
 				}
 				break;
