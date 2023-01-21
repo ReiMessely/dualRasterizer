@@ -2,7 +2,7 @@
 #define DAE_REI_MACROS
 #define SAFE_RELEASE(ptr) {if(ptr){ptr->Release(); ptr = nullptr;}}
 #define SAFE_DELETE(ptr) {if(ptr){delete ptr; ptr = nullptr;}}
-
+#define SAFE_DELETE_ARR(ptr) {if(ptr){delete[] ptr; ptr = nullptr;}}
 
 // https://stackoverflow.com/questions/9158150/colored-output-in-c
 #define RESET   "\033[0m"
