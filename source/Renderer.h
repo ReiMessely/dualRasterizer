@@ -7,6 +7,8 @@ struct SDL_Surface;
 
 namespace dae
 {
+	class Mesh;
+
 	class Renderer final
 	{
 	public:
@@ -38,6 +40,7 @@ namespace dae
 
 		// ...
 		Camera m_Camera;
+		std::vector<Mesh*> m_pMeshes;
 
 		//Render methods
 		void Render_software() const;

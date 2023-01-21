@@ -37,6 +37,13 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="HelperFuncts.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="DataTypes.h" />
+    <ClInclude Include="Effect.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="ShadedEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -57,5 +64,11 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="ShadedEffect.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

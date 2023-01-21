@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "Renderer.h"
 
+#include "Mesh.h"
+#include "ShadedEffect.h"
+#include "Texture.h"
+
 #include "HelperFuncts.h"
 
 namespace dae {
@@ -27,10 +31,33 @@ namespace dae {
 		}
 
 		m_Camera.Initialize(45.f, {}, static_cast<float>(m_Width) / m_Height);
+
+		// Initialize meshes
+		auto pShadedEffect{ std::make_unique<ShadedEffect>(m_pDevice, L"Resources/PosCol3D.fx") };
+
+		Texture vehicleDiffuseTexture{ m_pDevice, "Resources/vehicle_diffuse.png" };
+		Texture vehicleNormalTexture{ m_pDevice, "Resources/vehicle_normal.png" };
+		Texture vehicleSpecularTexture{ m_pDevice, "Resources/vehicle_specular.png" };
+		Texture vehicleGlossinessTexture{ m_pDevice, "Resources/vehicle_gloss.png" };
+		pShadedEffect->SetDiffuseMap(&vehicleDiffuseTexture);
+		pShadedEffect->SetNormalMap(&vehicleNormalTexture);
+		pShadedEffect->SetSpecularMap(&vehicleSpecularTexture);
+		pShadedEffect->SetGlossinessMap(&vehicleGlossinessTexture);
+
+		m_pMeshes.push_back(new Mesh{ m_pDevice, "Resources/vehicle.obj", std::move(pShadedEffect) });
+
+		m_pMeshes.back()->Translate(0, 0, 50);
 	}
 
 	Renderer::~Renderer()
 	{
+		for (auto& pMesh : m_pMeshes)
+		{
+			delete pMesh;
+			pMesh = nullptr;
+		}
+		m_pMeshes.clear();
+
 		SAFE_RELEASE(m_pRenderTargetView);
 		SAFE_RELEASE(m_pRenderTargetBuffer);
 
@@ -55,6 +82,11 @@ namespace dae {
 	void Renderer::Update(const Timer* pTimer)
 	{
 		m_Camera.Update(pTimer);
+
+		for (auto& pMesh : m_pMeshes)
+		{
+			pMesh->UpdateViewMatrices(m_Camera.GetWorldViewProjection(), m_Camera.GetInverseViewMatrix());
+		}
 	}
 
 
@@ -88,7 +120,19 @@ namespace dae {
 
 	void Renderer::Render_hardware() const
 	{
-		
+		// 1. Clear RTV and DSV
+		ColorRGB clearColor{ 0.0f, 0.0f, 0.3f };
+		m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, &clearColor.r);
+		m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+		// 2. Set pipeline + Invoke drawcalls (= render)
+		for (const auto& pMesh : m_pMeshes)
+		{
+			pMesh->Render(m_pDeviceContext);
+		}
+
+		// 3. Present backbuffer (swap)
+		m_pSwapChain->Present(0, 0);
 	}
 
 	HRESULT Renderer::InitializeDirectX()
