@@ -84,31 +84,6 @@ dae::Mesh::~Mesh()
 	SAFE_RELEASE(m_pInputLayout);
 }
 
-void dae::Mesh::RotateX(float angle)
-{
-	m_WorldMatrix = Matrix::CreateRotationX(angle) * m_WorldMatrix;
-}
-
-void dae::Mesh::RotateY(float angle)
-{
-	m_WorldMatrix = Matrix::CreateRotationY(angle) * m_WorldMatrix;
-}
-
-void dae::Mesh::RotateZ(float angle)
-{
-	m_WorldMatrix = Matrix::CreateRotationZ(angle) * m_WorldMatrix;
-}
-
-void dae::Mesh::Translate(const Vector3& v)
-{
-	Translate(v.x, v.y, v.z);
-}
-
-void dae::Mesh::Translate(float x, float y, float z)
-{
-	m_WorldMatrix = Matrix::CreateTranslation(x, y, z) * m_WorldMatrix;
-}
-
 void dae::Mesh::Render(ID3D11DeviceContext* pDeviceContext) const
 {
 	// 1. Set primitive topology
@@ -145,9 +120,9 @@ void dae::Mesh::Render(ID3D11DeviceContext* pDeviceContext) const
 
 void dae::Mesh::UpdateViewMatrices(const Matrix& viewProjectionMatrix, const Matrix& inverseViewMatrix)
 {
-	m_pEffect->SetWorldViewProjectionMatrix(m_WorldMatrix * viewProjectionMatrix);
+	m_pEffect->SetWorldViewProjectionMatrix(worldMatrix * viewProjectionMatrix);
 	m_pEffect->SetInverseViewMatrix(inverseViewMatrix);
-	m_pEffect->SetWorldMatrix(m_WorldMatrix);
+	m_pEffect->SetWorldMatrix(worldMatrix);
 }
 
 void dae::Mesh::SetFilteringMethod(Effect::FilteringMethod filteringMethod)

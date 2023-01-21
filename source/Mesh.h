@@ -10,7 +10,45 @@ enum class PrimitiveTopology
 
 namespace dae
 {
-	class Mesh final
+	class UntexturedMesh
+	{
+	public:
+		// Software
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
+		PrimitiveTopology primitiveTopology{ PrimitiveTopology::TriangleList };
+
+		std::vector<Vertex_Out> vertices_out{};
+
+		Matrix worldMatrix;
+
+		inline void RotateX(float angle)
+		{
+			worldMatrix = Matrix::CreateRotationX(angle) * worldMatrix;
+		}
+
+		inline void RotateY(float angle)
+		{
+			worldMatrix = Matrix::CreateRotationY(angle) * worldMatrix;
+		}
+
+		inline void RotateZ(float angle)
+		{
+			worldMatrix = Matrix::CreateRotationZ(angle) * worldMatrix;
+		}
+
+		inline void Translate(const Vector3& v)
+		{
+			Translate(v.x, v.y, v.z);
+		}
+
+		inline void Translate(float x, float y, float z)
+		{
+			worldMatrix = Matrix::CreateTranslation(x, y, z) * worldMatrix;
+		}
+	};
+
+	class Mesh final : public UntexturedMesh
 	{
 	public:
 		Mesh(ID3D11Device* pDevice, const std::string& objFilePath, std::unique_ptr<Effect> pEffect);
@@ -21,28 +59,13 @@ namespace dae
 		Mesh(Mesh&& other) = delete;
 		Mesh& operator=(Mesh&& other) = delete;
 
-		void RotateX(float angle);
-		void RotateY(float angle);
-		void RotateZ(float angle);
-		void Translate(const Vector3& v);
-		void Translate(float x, float y, float z);
-
 		// Hardware
 		void Render(ID3D11DeviceContext* pDeviceContext) const;
 
 		void UpdateViewMatrices(const Matrix& viewProjectionMatrix, const Matrix& inverseViewMatrix);
 
 		void SetFilteringMethod(Effect::FilteringMethod filteringMethod);
-
-		// Software
-		std::vector<Vertex> vertices{};
-		std::vector<uint32_t> indices{};
-		PrimitiveTopology primitiveTopology{ PrimitiveTopology::TriangleList };
-
-		std::vector<Vertex_Out> vertices_out{};
 	private:
-		Matrix m_WorldMatrix;
-
 		std::unique_ptr<Effect> m_pEffect{};
 
 		ID3D11InputLayout* m_pInputLayout{};
