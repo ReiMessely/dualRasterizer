@@ -46,7 +46,7 @@ int main(int argc, char* args[])
 	pTimer->Start();
 	float printTimer = 0.f;
 	bool isLooping = true;
-	bool displayFPS = true;
+	bool displayFPS = false;
 	while (isLooping)
 	{
 		//--------- Get input events ---------

@@ -80,6 +80,34 @@ namespace dae {
 		{
 			pMesh->Translate(0, 0, 50);
 		}
+
+		//----------------------------------------------
+		// Console message
+		//----------------------------------------------
+		using namespace std;
+
+		cout << YELLOW;
+		cout << "[Key bindings - SHARED]" << '\n';
+		cout << "	[F1]  Toggle Rasterizer Mode (HARDWARE/SOFTWARE)" << '\n';
+		cout << "	[F2]  Toggle Vehicle Rotation (ON/OFF)" << '\n';
+		cout << "	[F9]  Cycle CullMode (BACK/FRONT/NONE)" << '\n';
+		cout << "	[F10] Toggle Uniform ClearColor (ON/OFF)" << '\n';
+		cout << "	[F11] Toggle Print FPS (ON/OFF)" << '\n';
+		cout << '\n';
+		cout << GREEN;
+		cout << "[Key bindings - HARDWARE]" << '\n';
+		cout << "	[F3]  Toggle FireFX (ON/OFF)" << '\n';
+		cout << "	[F4]  Cycle Sampler State (POINT/LINEAR/ANISOTROPIC)" << '\n';
+		cout << '\n';
+		cout << MAGENTA;
+		cout << "[Key bindings - HARDWARE]" << '\n';
+		cout << "	[F5]  Cycle Shading Mode (COMBINED/OBSERVED_AREA/DIFFUSE/SPECULAR)" << '\n';
+		cout << "	[F6]  Toggle NormalMap (ON/OFF)" << '\n';
+		cout << "	[F7]  Toggle DepthBuffer Visualization (ON/OFF)" << '\n';
+		cout << "	[F8]  Toggle BoundingBox Visualization (ON/OFF)" << '\n';
+		cout << '\n';
+		cout << RESET;
+
 	}
 
 	Renderer::~Renderer()
@@ -149,7 +177,7 @@ namespace dae {
 			m_pCurrentRendererfunction = [this] {Render_hardware(); };
 			m_IsUsingHardware = true;
 		}
-		std::cout << RED << "[GLOBAL MODE] " << (m_IsUsingHardware ? "Hardware" : "Software") << '\n' << RESET;
+		std::cout << YELLOW << "[GLOBAL MODE] " << (m_IsUsingHardware ? "Hardware" : "Software") << '\n' << RESET;
 	}
 
 	void Renderer::ToggleRotation()
@@ -160,30 +188,34 @@ namespace dae {
 
 	void Renderer::CycleCullModes()
 	{
-		std::cout << "[CULLMODE] Not implemented yet!\n";
+		std::cout << YELLOW << "[CULLMODE] Not implemented yet!\n" << RESET;
 	}
 
 	void Renderer::ToggleUniformClearColor()
 	{
 		m_EnableUniformClearColor = !m_EnableUniformClearColor;
-		std::cout << GREEN << "[UNIFORM COLOR] " << (m_EnableUniformClearColor ? "Enabled" : "Disabled") << '\n' << RESET;
+		std::cout << YELLOW << "[UNIFORM COLOR] " << (m_EnableUniformClearColor ? "Enabled" : "Disabled") << '\n' << RESET;
 	}
 
 	void Renderer::ToggleFireFXMesh()
 	{
+		if (!m_IsUsingHardware) return;
+
 		m_EnableFireFX = !m_EnableFireFX;
-		std::cout << "[FIREFX] " << (m_EnableFireFX ? "Enabled" : "Disabled") << '\n';
+		std::cout << GREEN << "[FIREFX] " << (m_EnableFireFX ? "Enabled" : "Disabled") << '\n' << RESET;
 	}
 
 	void Renderer::ToggleTextureSamplingStates()
 	{
+		if (!m_IsUsingHardware) return;
+
 		m_FilteringMethod = static_cast<Effect::FilteringMethod>((static_cast<int>(m_FilteringMethod) + 1) % (static_cast<int>(Effect::FilteringMethod::END)));
 		for (const auto& pMesh : m_pMeshes)
 		{
 			pMesh->SetFilteringMethod(m_FilteringMethod);
 		}
 
-		std::cout << "[FILTERINGMETHOD] ";
+		std::cout << GREEN << "[FILTERINGMETHOD] ";
 		switch (m_FilteringMethod)
 		{
 		case dae::Effect::FilteringMethod::Point:
@@ -196,13 +228,16 @@ namespace dae {
 			std::cout << "Anisotropic\n";
 			break;
 		}
+		std::cout << RESET;
 	}
 
 	void Renderer::CycleShadingMode()
 	{
+		if (m_IsUsingHardware) return;
+
 		m_ShadingMode = static_cast<ShadingMode>((static_cast<int>(m_ShadingMode) + 1) % (static_cast<int>(ShadingMode::END)));
 
-		std::cout << "[SHADINGMODE] ";
+		std::cout << MAGENTA << "[SHADINGMODE] ";
 		switch (m_ShadingMode)
 		{
 		case dae::Renderer::ShadingMode::ObservedArea:
@@ -218,25 +253,31 @@ namespace dae {
 			std::cout << "Combined\n";
 			break;
 		}
-
+		std::cout << RESET;
 	}
 
 	void Renderer::ToggleNormalMap()
 	{
+		if (m_IsUsingHardware) return;
+
 		m_EnableNormalMap = !m_EnableNormalMap;
-		std::cout << "[NORMAL MAP] " << (m_EnableNormalMap ? "Enabled" : "Disabled") << '\n';
+		std::cout << MAGENTA << "[NORMAL MAP] " << (m_EnableNormalMap ? "Enabled" : "Disabled") << '\n' << RESET;
 	}
 
 	void Renderer::ToggleDepthBufferVisualisation()
 	{
+		if (m_IsUsingHardware) return;
+
 		m_EnableDepthBufferVisualisation = !m_EnableDepthBufferVisualisation;
-		std::cout << "[DEPTHBUFFER VISUALISATION] " << (m_EnableDepthBufferVisualisation ? "Enabled" : "Disabled") << '\n';
+		std::cout << MAGENTA << "[DEPTHBUFFER VISUALISATION] " << (m_EnableDepthBufferVisualisation ? "Enabled" : "Disabled") << '\n' << RESET;
 	}
 
 	void Renderer::ToggleBoundingBoxVisualisation()
 	{
+		if (m_IsUsingHardware) return;
+
 		m_EnableBoundingBoxVisualisation = !m_EnableBoundingBoxVisualisation;
-		std::cout << "[BOUNDINGBOX VISUALISATION] " << (m_EnableBoundingBoxVisualisation ? "Enabled" : "Disabled") << '\n';
+		std::cout << MAGENTA << "[BOUNDINGBOX VISUALISATION] " << (m_EnableBoundingBoxVisualisation ? "Enabled" : "Disabled") << '\n' << RESET;
 	}
 
 	void Renderer::Render_software() const
