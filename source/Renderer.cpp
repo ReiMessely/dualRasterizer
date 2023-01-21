@@ -519,6 +519,7 @@ namespace dae {
 				break;
 			}
 
+			finalColor += m_AmbientColor;
 		}
 		else
 		{
