@@ -160,23 +160,24 @@ namespace dae
 			const uint32_t mouseState = SDL_GetRelativeMouseState(&mouseX, &mouseY);
 
 #pragma region Mousebased Movement
+			const constexpr float mouseBasedMovementMultiplier{ 3 };
 			// LMB
 			if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT))
 			{
 				// RMB
 				if (mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT))
 				{
-					origin += right * (-mouseY * movementSpeed * deltaTime);
+					origin += right * (-mouseY * movementSpeed * mouseBasedMovementMultiplier * deltaTime);
 				}
 				else
 				{
-					origin += forward * (-mouseY * movementSpeed * deltaTime);
+					origin += forward * (-mouseY * movementSpeed * mouseBasedMovementMultiplier * deltaTime);
 				}
 			}
 #pragma endregion
 
 #pragma region Rotation
-			if (mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT))
+			else if (mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT))
 			{
 				forward = Matrix::CreateRotationY(mouseX * rotationSpeed).TransformVector(forward);
 				forward = Matrix::CreateRotationX(-mouseY * rotationSpeed).TransformVector(forward);
