@@ -44,6 +44,7 @@ int main(int argc, char* args[])
 	pTimer->Start();
 	float printTimer = 0.f;
 	bool isLooping = true;
+	bool displayFPS = true;
 	while (isLooping)
 	{
 		//--------- Get input events ---------
@@ -59,6 +60,10 @@ int main(int argc, char* args[])
 				if (e.key.keysym.scancode == SDL_SCANCODE_F1)
 				{
 					pRenderer->ToggleBetweenHardwareSoftware();
+				}
+				else if (e.key.keysym.scancode = SDL_SCANCODE_F11)
+				{
+					displayFPS = !displayFPS;
 				}
 				break;
 			default: ;
@@ -77,7 +82,8 @@ int main(int argc, char* args[])
 		if (printTimer >= 1.f)
 		{
 			printTimer = 0.f;
-			std::cout << "dFPS: " << pTimer->GetdFPS() << std::endl;
+			if (displayFPS)
+				std::cout << "dFPS: " << pTimer->GetdFPS() << '\n';
 		}
 	}
 	pTimer->Stop();
