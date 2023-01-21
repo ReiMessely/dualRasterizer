@@ -77,23 +77,19 @@ namespace dae
 
 	void Effect::SetFilteringMethod(FilteringMethod filterMethod)
 	{
-		std::cout << "[FILTERINGMETHOD] ";
 		switch (filterMethod)
 		{
 		case dae::Effect::FilteringMethod::Point:
 			m_pTechnique = m_pEffect->GetTechniqueByName("PointFilteringTechnique");
 			if (!m_pTechnique->IsValid()) std::wcout << L"PointTechnique not valid\n";
-			std::cout << "Point\n";
 			break;
 		case dae::Effect::FilteringMethod::Linear:
 			m_pTechnique = m_pEffect->GetTechniqueByName("LinearFilteringTechnique");
 			if (!m_pTechnique->IsValid()) std::wcout << L"LinearTechnique not valid\n";
-			std::cout << "Linear\n";
 			break;
 		case dae::Effect::FilteringMethod::Anisotropic:
 			m_pTechnique = m_pEffect->GetTechniqueByName("AnisotropicFilteringTechnique");
 			if (!m_pTechnique->IsValid()) std::wcout << L"AnisotropicTechnique not valid\n";
-			std::cout << "Anisotropic\n";
 			break;
 		}
 	}

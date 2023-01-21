@@ -114,13 +114,13 @@ namespace dae {
 			m_pCurrentRendererfunction = [this] {Render_hardware(); };
 			m_IsUsingHardware = true;
 		}
-		std::cout << "[GLOBAL MODE] " << (m_IsUsingHardware ? "Hardware" : "Software") << '\n';
+		std::cout << RED << "[GLOBAL MODE] " << (m_IsUsingHardware ? "Hardware" : "Software") << '\n' << RESET;
 	}
 
 	void Renderer::ToggleRotation()
 	{
 		m_EnableRotation = !m_EnableRotation;
-		std::cout << "[ROTATION] " << (m_EnableRotation ? "Enabled" : "Disabled") << '\n';
+		std::cout << YELLOW << "[ROTATION] " << (m_EnableRotation ? "Enabled" : "Disabled") << '\n' << RESET;
 	}
 
 	void Renderer::CycleCullModes()
@@ -130,7 +130,7 @@ namespace dae {
 	void Renderer::ToggleUniformClearColor()
 	{
 		m_EnableUniformClearColor = !m_EnableUniformClearColor;
-		std::cout << "[UNIFORM COLOR] " << (m_EnableUniformClearColor ? "Enabled" : "Disabled") << '\n';
+		std::cout << GREEN << "[UNIFORM COLOR] " << (m_EnableUniformClearColor ? "Enabled" : "Disabled") << '\n' << RESET;
 	}
 
 	void Renderer::ToggleFireFXMesh()

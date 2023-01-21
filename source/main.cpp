@@ -7,6 +7,8 @@
 #undef main
 #include "Renderer.h"
 
+#include "HelperFuncts.h"
+
 using namespace dae;
 
 void ShutDown(SDL_Window* pWindow)
@@ -91,7 +93,7 @@ int main(int argc, char* args[])
 					break;
 				case SDL_SCANCODE_F11:
 					displayFPS = !displayFPS;
-					std::cout << "[FPS DISPLAY] " << (displayFPS ? "Enabled" : "Disabled") << '\n';
+					std::wcout << BOLDWHITE << L"[FPS DISPLAY] " << (displayFPS ? L"Enabled" : L"Disabled") << '\n' << RESET;
 					break;
 				}
 				break;
@@ -112,7 +114,7 @@ int main(int argc, char* args[])
 		{
 			printTimer = 0.f;
 			if (displayFPS)
-				std::cout << "dFPS: " << pTimer->GetdFPS() << '\n';
+				std::cout << WHITE << "dFPS: " << pTimer->GetdFPS() << '\n' << RESET;
 		}
 	}
 	pTimer->Stop();
