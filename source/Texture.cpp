@@ -8,6 +8,7 @@
 dae::Texture::Texture(ID3D11Device* pDevice, const std::string& filePath)
 {
 	m_pSurface = IMG_Load(filePath.c_str());
+	m_pSurfacePixels = reinterpret_cast<uint32_t*>(m_pSurface->pixels);
 
 	// Texture description
 	const DXGI_FORMAT format{ DXGI_FORMAT_R8G8B8A8_UNORM };
