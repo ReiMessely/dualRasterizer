@@ -1,6 +1,8 @@
 #pragma once
 #include <fstream>
 #include "Math.h"
+#include "Vector3.h"
+#include "ColorRGB.h"
 
 namespace dae
 {
@@ -159,5 +161,66 @@ namespace dae
 			return true;
 		}
 #pragma warning(pop)
+		inline bool IsInTriangle(const Vector2& point, const Vector2& v0, const Vector2& v1, const Vector2& v2)
+		{
+			Vector2 edgeA{ v1 - v0 };
+			if (Vector2::Cross(edgeA, point - v0) < 0)
+				return false;
+			Vector2 edgeB{ v2 - v1 };
+			if (Vector2::Cross(edgeB, point - v1) < 0)
+				return false;
+			Vector2 edgeC{ v0 - v2 };
+			if (Vector2::Cross(edgeC, point - v2) < 0)
+				return false;
+
+			return true;
+		}
+
+		inline constexpr float Remap(float input, float min, float max)
+		{
+			// Clamp gives a value between min & max
+			// substracting min results in the same difference but shifted towards the 0 point
+			// dividing by the difference between max and min will result in a value between 0-1
+			return (std::clamp(input, min, max) - min) / (max - min);
+		}
+	}
+
+	namespace BRDF
+	{
+		/**
+		 * \param kd Diffuse Reflection Coefficient
+		 * \param cd Diffuse Color
+		 * \return Lambert Diffuse Color
+		 */
+		inline ColorRGB Lambert(float kd, const ColorRGB& cd)
+		{
+			return { (kd * cd) / PI };
+		}
+
+		inline ColorRGB Lambert(const ColorRGB& kd, const ColorRGB& cd)
+		{
+			return { (kd * cd) / PI };
+		}
+
+		/**
+		 * \brief todo
+		 * \param ks Specular Reflection Coefficient
+		 * \param exp Phong Exponent
+		 * \param l Incoming (incident) Light Direction
+		 * \param v View Direction
+		 * \param n Normal of the Surface
+		 * \return Phong Specular Color
+		 */
+		inline ColorRGB Phong(float ks, float exp, const Vector3& l, const Vector3& v, const Vector3& n)
+		{
+			Vector3 reflect = Vector3::Reflect(l, n);
+			float alfa = Vector3::DotClamp(reflect, v);
+			float PSR{};
+			if (alfa > 0)
+			{
+				PSR = ks * (powf(alfa, exp));
+			}
+			return { PSR,PSR,PSR };
+		}
 	}
 }
