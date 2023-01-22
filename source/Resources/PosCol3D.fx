@@ -12,6 +12,7 @@ float4x4 gViewInverseMatrix : ViewInverse;
 
 float gPI = 3.14159265358979311600;
 float3 gLightDirection = normalize(float3(0.577f, -0.577f, 0.577f));
+float4 gAmbientColor = float4(0.025f,0.025f,0.025f,0);
 float gLightIntensity = 7.0f;
 float gShininess = 25.0f;
 
@@ -128,7 +129,9 @@ float4 PS_Phong(VS_OUTPUT input, SamplerState state) : SV_TARGET
 	const float specularExp = gShininess * gGlossinessMap.Sample(state, input.UV).r;
 	const float4 specular = gSpecularMap.Sample(state, input.UV) * CalculatePhong(1.0f, specularExp, -gLightDirection, viewDirection, input.Normal);
 
-	return (gLightIntensity * lambert + specular) * observedArea;
+    float4 output = gLightIntensity * observedArea * lambert + specular;
+    output += gAmbientColor;
+	return output;
 }
 
 float4 PS_Point(VS_OUTPUT input) : SV_TARGET

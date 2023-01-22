@@ -79,6 +79,8 @@ namespace dae {
 		for (auto& pMesh : m_pMeshes)
 		{
 			pMesh->Translate(0, 0, 50);
+			pMesh->SetFilteringMethod(m_FilteringMethod);
+			pMesh->SetCullingMode(m_CullingMode);
 		}
 
 		//----------------------------------------------
@@ -189,6 +191,29 @@ namespace dae {
 	void Renderer::CycleCullModes()
 	{
 		std::cout << YELLOW << "[CULLMODE] Not implemented yet!\n" << RESET;
+
+		m_CullingMode = static_cast<CullingMode>((static_cast<int>(m_CullingMode) + 1) % (static_cast<int>(CullingMode::END)));
+		for (const auto& pMesh : m_pMeshes)
+		{
+			if (pMesh == m_pFireFX) continue;
+
+			pMesh->SetCullingMode(m_CullingMode);
+		}
+
+		std::cout << GREEN << "[CULLINGMODE] ";
+		switch (m_CullingMode)
+		{
+		case dae::CullingMode::Front:
+			std::cout << "Front\n";
+			break;
+		case dae::CullingMode::Back:
+			std::cout << "Back\n";
+			break;
+		case dae::CullingMode::None:
+			std::cout << "None\n";
+			break;
+		}
+		std::cout << RESET;
 	}
 
 	void Renderer::ToggleUniformClearColor()
@@ -441,8 +466,24 @@ namespace dae {
 				const Vector2 currentPixel{ static_cast<float>(px),static_cast<float>(py) };
 				const int pixelIdx{ px + py * m_Width };
 				// Cross products for weights go to waste, optimalisation is possible
-				const bool hitTriangle{ Utils::IsInTriangle(currentPixel,vert0,vert1,vert2) };
-				if (hitTriangle)
+				bool renderTriangle{ false };
+				switch (m_CullingMode)
+				{
+				case dae::CullingMode::Front:
+					renderTriangle = Utils::IsBackFaceHit(currentPixel, vert0, vert1, vert2);
+					break;
+				case dae::CullingMode::Back:
+					renderTriangle = Utils::IsFrontFaceHit(currentPixel, vert0, vert1, vert2);
+					break;
+				case dae::CullingMode::None:
+					renderTriangle = Utils::IsFrontFaceHit(currentPixel, vert0, vert1, vert2);
+					if (!renderTriangle)
+					{
+						renderTriangle = Utils::IsBackFaceHit(currentPixel, vert0, vert1, vert2);
+					}
+					break;
+				}
+				if (renderTriangle)
 				{
 
 					// weights

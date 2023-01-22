@@ -129,3 +129,8 @@ void dae::Mesh::SetFilteringMethod(Effect::FilteringMethod filteringMethod)
 {
 	m_pEffect->SetFilteringMethod(filteringMethod);
 }
+
+void dae::Mesh::SetCullingMode(CullingMode cullMode)
+{
+	m_pEffect->SetCullingMode(cullMode);
+}

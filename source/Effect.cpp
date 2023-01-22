@@ -7,6 +7,7 @@ namespace dae
 {
 	Effect::Effect(ID3D11Device* pDevice, const std::wstring& assetFile)
 		: m_pEffect{ LoadEffect(pDevice, assetFile) }
+		, m_pDevice{ pDevice }
 	{
 		m_pTechnique = m_pEffect->GetTechniqueByName("PointFilteringTechnique");
 		if (!m_pTechnique->IsValid())
@@ -28,6 +29,14 @@ namespace dae
 		{
 			std::wcout << L"m_pDiffuseMapVariable not valid!\n";
 		}
+
+		m_pRasterizerStateVariable = m_pEffect->GetVariableByName("gRasterizerState")->AsRasterizer();
+		if (!m_pRasterizerStateVariable->IsValid())
+		{
+			std::wcout << L"m_pRasterizerVariable not valid!\n";
+		}
+
+		
 	}
 
 	Effect::~Effect()
@@ -91,6 +100,53 @@ namespace dae
 			m_pTechnique = m_pEffect->GetTechniqueByName("AnisotropicFilteringTechnique");
 			if (!m_pTechnique->IsValid()) std::wcout << L"AnisotropicTechnique not valid\n";
 			break;
+		}
+	}
+
+	void Effect::SetCullingMode(CullingMode cullMode)
+	{
+		D3D11_RASTERIZER_DESC rasterizerDesc{};
+		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+		rasterizerDesc.FrontCounterClockwise = false;
+		rasterizerDesc.DepthBias = 0;
+		rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+		rasterizerDesc.DepthBiasClamp = 0.0f;
+		rasterizerDesc.DepthClipEnable = true;
+		rasterizerDesc.ScissorEnable = false;
+		rasterizerDesc.MultisampleEnable = false;
+		rasterizerDesc.AntialiasedLineEnable = false;
+
+		switch (cullMode)
+		{
+		case CullingMode::Front:
+		{
+			rasterizerDesc.CullMode = D3D11_CULL_FRONT;
+			break;
+		}
+		case CullingMode::Back:
+		{
+			rasterizerDesc.CullMode = D3D11_CULL_BACK;
+			break;
+		}
+		case CullingMode::None:
+		{
+			rasterizerDesc.CullMode = D3D11_CULL_NONE;
+			break;
+		}
+		}
+
+		if (m_pRasterizerState) m_pRasterizerState->Release();
+
+		HRESULT hr{ m_pDevice->CreateRasterizerState(&rasterizerDesc, &m_pRasterizerState) };
+		if (FAILED(hr))
+		{
+			std::cout << "m_pRasterizerState failed to load\n";
+		}
+
+		hr = m_pRasterizerStateVariable->SetRasterizerState(0, m_pRasterizerState);
+		if (FAILED(hr))
+		{
+			std::cout << "Failed to change rasterizer state\n";
 		}
 	}
 

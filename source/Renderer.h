@@ -81,7 +81,8 @@ namespace dae
 		bool m_EnableNormalMap{ true };
 		bool m_EnableDepthBufferVisualisation{ false };
 		bool m_EnableBoundingBoxVisualisation{ false };
-		Effect::FilteringMethod m_FilteringMethod;
+		Effect::FilteringMethod m_FilteringMethod{ Effect::FilteringMethod::Point };
+		CullingMode m_CullingMode{ CullingMode::Back };
 		// Shading method is under software
 
 		// ...

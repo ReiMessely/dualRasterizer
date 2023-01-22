@@ -65,6 +65,8 @@ namespace dae
 		void UpdateViewMatrices(const Matrix& viewProjectionMatrix, const Matrix& inverseViewMatrix);
 
 		void SetFilteringMethod(Effect::FilteringMethod filteringMethod);
+
+		void SetCullingMode(CullingMode cullMode);
 	private:
 		std::unique_ptr<Effect> m_pEffect{};
 
