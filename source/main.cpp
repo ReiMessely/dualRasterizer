@@ -9,7 +9,20 @@
 
 #include "HelperFuncts.h"
 
+#include <Windows.h>
+
 using namespace dae;
+
+void enableColors()
+{
+	// Got this from Sander De Keukelaere
+	DWORD consoleMode;
+	const HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (GetConsoleMode(outputHandle, &consoleMode))
+	{
+		SetConsoleMode(outputHandle, consoleMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+	}
+}
 
 void ShutDown(SDL_Window* pWindow)
 {
@@ -22,6 +35,8 @@ int main(int argc, char* args[])
 	//Unreferenced parameters
 	(void)argc;
 	(void)args;
+
+	enableColors();
 
 	//Create window + surfaces
 	SDL_Init(SDL_INIT_VIDEO);

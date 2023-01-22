@@ -117,7 +117,6 @@ namespace dae
 
 		ShadingMode m_ShadingMode{ ShadingMode::Combined };
 
-		// Needs to be paired with HARDWARE
 		const DirectionalLight m_GlobalLight{ Vector3{ .577f,-.557f,.577f }.Normalized() , 7.f };
 		const float m_SpecularShininess{ 25.0f };
 		const ColorRGB m_AmbientColor{ 0.025f, 0.025f, 0.025f };
