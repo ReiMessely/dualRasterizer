@@ -41,6 +41,7 @@ namespace dae
 
 	Effect::~Effect()
 	{
+		SAFE_RELEASE(m_pRasterizerState);
 		SAFE_RELEASE(m_pEffect);
 	}
 
