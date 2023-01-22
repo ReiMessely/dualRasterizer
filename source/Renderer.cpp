@@ -537,7 +537,7 @@ namespace dae {
 
 		if (!m_EnableDepthBufferVisualisation)
 		{
-			const float observedArea{ Vector3::DotClamp(normal.Normalized(), -m_GlobalLight.direction) };
+			const float observedArea{ Vector3::DotClamp(normal.Normalized(), -m_GlobalLight.direction.Normalized()) };
 			finalColor = m_pVehicleDiffuseTexture->Sample(v.uv);
 			const ColorRGB lambert{ BRDF::Lambert(1.0f, m_pVehicleDiffuseTexture->Sample(v.uv)) };
 			const float specularVal{ m_SpecularShininess * m_pVehicleGlossinessTexture->Sample(v.uv).r };
@@ -550,10 +550,9 @@ namespace dae {
 				finalColor = ColorRGB{ observedArea, observedArea, observedArea };
 				break;
 			case dae::Renderer::ShadingMode::Diffuse:
-				finalColor += m_GlobalLight.intensity * observedArea * lambert;
 				break;
 			case dae::Renderer::ShadingMode::Specular:
-				finalColor += specular * observedArea;
+				finalColor = specular * observedArea;
 				break;
 			case dae::Renderer::ShadingMode::Combined:
 				finalColor += m_GlobalLight.intensity * observedArea * lambert + specular;

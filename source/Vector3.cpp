@@ -52,7 +52,7 @@ namespace dae {
 
 	float Vector3::DotClamp(const Vector3& v1, const Vector3& v2)
 	{
-		return { std::max(0.0f,Vector3::Dot(v1,v2)) };
+		return { std::clamp(Vector3::Dot(v1,v2),0.0f,1.0f) };
 	}
 
 	Vector3 Vector3::Cross(const Vector3& v1, const Vector3& v2)
